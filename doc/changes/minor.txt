@@ -1,0 +1,4 @@
+New: The new function compute_max_norm() implements the computation
+of the maximum norm for a vector.
+
+(Jonas Plank, 2025/09/09)
