@@ -1,0 +1,76 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  format:
+    name: Check formatting
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install clang-format
+        run: sudo apt-get update && sudo apt-get install -y clang-format
+      - name: Run clang-format check
+        run: |
+          FILES=$(find . -name '*.cpp' -o -name '*.h')
+          clang-format --dry-run --Werror $FILES
+
+  lint:
+    name: Run clang-tidy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install clang-tidy
+        run: sudo apt-get update && sudo apt-get install -y clang-tidy
+      - name: Run clang-tidy
+        run: |
+          mkdir build && cd build
+          cmake .. -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+          cd ..
+          clang-tidy $(find . -name '*.cpp') -- -I./include
+
+  build_and_test:
+    name: Build project and run tests
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    steps:
+      - uses: actions/checkout@v4
+
+      # Cache für ccache
+      - name: Set up ccache
+        uses: hendrikmuhs/ccache-action@v1
+
+      - name: Configure project
+        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
+      - name: Build
+        run: cmake --build build --config Debug
+      - name: Run tests
+        run: ctest --test-dir build --output-on-failure
+
+  build_release:
+    name: Build project in release
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    steps:
+      - uses: actions/checkout@v4
+
+      # Cache für ccache
+      - name: Set up ccache
+        uses: hendrikmuhs/ccache-action@v1
+
+      - name: Configure project
+        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
+      - name: Build
+        run: cmake --build build --config Release
+      - name: Export executable
+        uses: actions/upload-artifact@v4
+        with:
+          name: myproject-${{ matrix.os }}
+          compression-level: 9
+          path: build/*
