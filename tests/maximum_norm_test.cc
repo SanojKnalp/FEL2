@@ -1,7 +1,7 @@
 #include <vector>
 #include <iostream>
 #include  <complex>
-#include "../include/FEL2/utils/vector_norm.h"
+#include "../src/utils/vector_norm.h"
 
 
 int main(){
