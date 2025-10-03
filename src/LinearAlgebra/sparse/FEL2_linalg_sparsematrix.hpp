@@ -38,16 +38,13 @@ namespace LinearAlgebra
             }
 
             void vmult(arma::Col<T>& c, const arma::Col<T>& x) const {
-                if (mat.n_cols != B.mat.n_rows) {
-                    throw std::invalid_argument("Dimension mismatch in mmult()");
+                if (mat.n_cols != x.size) {
+                    throw std::invalid_argument("Dimension mismatch in vmult()");
                 }
                 c = mat * x;
             }
 
             void smult(SparseMatrix<T> &C, T scalar) const {
-                if (mat.n_cols != B.mat.n_rows) {
-                    throw std::invalid_argument("Dimension mismatch in mmult()");
-                }
                 C = scalar*mat;
             }
              
