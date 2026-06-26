@@ -5,7 +5,11 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Armadillo (via vcpkg)
-find_package(Armadillo CONFIG REQUIRED)
+find_package(Armadillo CONFIG QUIET)
+
+if(NOT Armadillo_FOUND)
+    find_package(Armadillo REQUIRED)
+endif()
 
 # Core library
 add_library(come_lib)
