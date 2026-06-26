@@ -237,3 +237,15 @@ TEST_CASE("Full Matrix reinit")
     A.reinit(5);
     REQUIRE(A.cols() == 5);
 }
+
+TEST_CASE("determinant")
+{
+    using namespace LinearAlgebra;
+    FullMatrix<float> A(3,3);
+    A(0, 0) = 1.0;
+    A(1, 1) = 2.0;
+    A(2, 2) = 3.0;
+
+    REQUIRE(A.det() == Approx(6.0));
+
+}

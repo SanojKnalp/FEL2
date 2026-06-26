@@ -1,9 +1,14 @@
 # Changelog
 All the changes i make to the code are documented here.
 ## 2026 
+### June
+#### 26.06.2026
+Reworked the mesh readIn for Abaqus to support a lexiographic numbering, which makes it later easier to use tensor products.
 ### April
 #### 28.04.2026 
 Worked on connecting cells and the mappings for the computation of the jacobian later.
+Add wrapper for determinant function for dense matrices.
+For next time: Implement TensorproductShapeFunctionGradient and Jacobian.
 #### 10.04.2026
 Updated the DoFHandler to now properly distribute the DoFs.
 Next Step: We need an active cell iterator, which just loops over all the active cells which we can use later for the computation of the jacobian. Once we have that we are good.

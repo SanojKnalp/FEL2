@@ -192,6 +192,11 @@ namespace LinearAlgebra {
             return *this;
         }
 
+        T det()
+        {
+            return arma::det(mat);
+        }
+
 
 
 

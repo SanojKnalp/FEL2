@@ -2,6 +2,7 @@
 #include "FEM/ShapeFunctions/COME_ShapeFunctions.hpp"
 #include "FEM/Quadrature/COME_Quadrature.hpp"
 #include "Grid/COME_AbsTopologicalComponent.hpp"
+#include "LinearAlgebra/COME_Linalg_dense.hpp"
 
 #include <array>
 #include <vector>
@@ -26,9 +27,13 @@ namespace FEM
 			TensorProductQPointsAndWeights();
 		}
 
+		void Jacobian2() const;
+
 		const double& shape_value(const unsigned int index, const unsigned int q_point) const;
 		const double& JxW(const unsigned int q_point) const;
 		void reinit(const Mesh::AbsTopologicalComponent<dim,spacedim>& cell);
+		std::vector<std::array<double, spacedim>>& get_cell_nodes();
+
 
 	private:
 
@@ -42,8 +47,10 @@ namespace FEM
 
 
 		double TensorproductShapeFunctionsValue(const unsigned int index, std::array<double,dim>& localPoints) const;
+		LinearAlgebra::Vector<double> TensorproductShapeFunctionGradient(const unsigned int index, std::array<double, dim>& localPoints) const;
 		void TensorProductQPointsAndWeights();
-		double JacobianDeterminant();
+		LinearAlgebra::FullMatrix<double> Jacobian(const unsigned int q_point);
+		double JacobianDeterminant(const unsigned int q_point);
 
 	};
 
@@ -101,5 +108,26 @@ namespace FEM
 		{
 			cell_nodes.push_back(node->getCoordinates());
 		}
+	}
+
+	template <int dim, int spacedim>
+	std::vector<std::array<double, spacedim>>& FEValues<dim, spacedim>::get_cell_nodes()
+	{
+		return cell_nodes;
+	}
+
+	template <int dim, int spacedim>
+	void FEValues<dim, spacedim>::Jacobian2() const
+	{
+		std::cout << "nodes: ";
+		for (const auto& node : cell_nodes) {
+			std::cout << "[ ";
+			for (double coord : node) {
+				std::cout << coord << " ";
+			}
+			std::cout << "] ";
+		}
+		std::cout << std::endl;
+
 	}
 }
