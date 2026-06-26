@@ -10,22 +10,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      - name: Install dependencies (Ubuntu)
-        if: runner.os == 'Linux'
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libarmadillo-dev
-
-      - name: Install dependencies (macOS)
-        if: runner.os == 'macOS'
-        run: |
-          brew update
-          brew install armadillo
-      - name: Install dependencies (Windows)
-        if: runner.os == 'Windows'
-        run: |
-          vcpkg install armadillo
       - name: Install clang-format
         run: sudo apt-get update && sudo apt-get install -y clang-format
       - name: Run clang-format check
@@ -38,8 +22,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Install clang-tidy
-        run: sudo apt-get update && sudo apt-get install -y clang-tidy
+      - name: Install dependencies and clang-tidy
+        run: |
+          sudo apt-get update 
+          sudo apt-get install -y clang-tidy libarmadillo-dev
       - name: Run clang-tidy
         run: |
           mkdir build && cd build
@@ -56,9 +42,25 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # Cache für ccache
+      # Cache for ccache
       - name: Set up ccache
         uses: hendrikmuhs/ccache-action@v1
+
+      - name: Install dependencies (Ubuntu)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libarmadillo-dev
+
+      - name: Install dependencies (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          brew update
+          brew install armadillo
+
+      - name: Install dependencies (Windows)
+        if: runner.os == 'Windows'
+        run: vcpkg install armadillo
 
       - name: Configure project
         run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
@@ -76,9 +78,25 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # Cache für ccache
+      # Cache for ccache
       - name: Set up ccache
         uses: hendrikmuhs/ccache-action@v1
+
+      - name: Install dependencies (Ubuntu)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libarmadillo-dev
+
+      - name: Install dependencies (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          brew update
+          brew install armadillo
+
+      - name: Install dependencies (Windows)
+        if: runner.os == 'Windows'
+        run: vcpkg install armadillo
 
       - name: Configure project
         run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
