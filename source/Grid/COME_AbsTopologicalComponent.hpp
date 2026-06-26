@@ -9,8 +9,10 @@
 #include "Grid/COME_Node.hpp"
 
 //forward declaration:
-template<int dim, int spacedim>
-class FEM::FEValues;
+namespace FEM {
+	template <int dim, int spacedim>
+	class FEValues;
+}
 
 
 namespace Mesh
