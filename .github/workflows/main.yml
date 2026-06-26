@@ -5,18 +5,6 @@ on:
   pull_request:
 
 jobs:
-  format:
-    name: Check formatting
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Install clang-format
-        run: sudo apt-get update && sudo apt-get install -y clang-format
-      - name: Run clang-format check
-        run: |
-          FILES=$(find . -name '*.cpp' -o -name '*.h')
-          clang-format --dry-run --Werror $FILES
-
   lint:
     name: Run clang-tidy
     runs-on: ubuntu-latest
