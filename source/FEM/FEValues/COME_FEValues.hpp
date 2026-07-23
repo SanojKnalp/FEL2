@@ -30,8 +30,8 @@ namespace FEM
 
 		void Jacobian2();
 
-		const double& shape_value(const unsigned int index, const unsigned int q_point) const;
-		const double& JxW(const unsigned int q_point) const;
+		const double shape_value(const unsigned int index, const unsigned int q_point) const;
+		const double JxW(const unsigned int q_point) const;
 		void reinit(const Mesh::AbsTopologicalComponent<dim,spacedim>& cell);
 		std::vector<std::array<double, spacedim>>& get_cell_nodes();
 

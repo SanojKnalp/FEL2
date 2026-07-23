@@ -15,7 +15,7 @@ namespace FEM
 	}
 
 	template <int dim, int spacedim>
-	const double& FEValues<dim,spacedim>::shape_value(const unsigned int index, const unsigned int q_point) const
+	const double FEValues<dim,spacedim>::shape_value(const unsigned int index, const unsigned int q_point) const
 	{
 		return TensorproductShapeFunctionsValue(index, q_point);
 	}
@@ -91,7 +91,7 @@ namespace FEM
 
 	
 	template <int dim, int spacedim>
-	const double& FEValues<dim, spacedim>::JxW(const unsigned int q_point) const
+	const double FEValues<dim, spacedim>::JxW(const unsigned int q_point) const
 	{
 		return qWeights_[q_point]*JacobianDeterminant(q_point); // we still need the jacobian
 
