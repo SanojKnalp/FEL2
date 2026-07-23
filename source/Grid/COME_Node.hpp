@@ -10,9 +10,9 @@ namespace Mesh
 	{
 	public:
 		Node() = default;
-		Node(int id, std::array<double, spacedim> position) :
-		 position_(position) {
-		}
+		Node(int id, std::array<double, spacedim> position)
+		: position_(position)
+		{}
 		const std::array<double, spacedim> getCoordinates() const ;
 		std::vector<Node<dim, spacedim>*> getNodes() const;
 	private:

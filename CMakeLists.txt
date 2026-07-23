@@ -15,8 +15,9 @@ endif()
 add_library(come_lib)
 
 target_link_libraries(come_lib
-    PUBLIC armadillo
+    PUBLIC armadillo 
 )
+
 
 target_include_directories(come_lib
     PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/source

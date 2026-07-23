@@ -1,2 +1,3 @@
 add_subdirectory(ShapeFunctions)
 add_subdirectory(Quadrature)
+add_subdirectory(FEValues)

@@ -45,7 +45,7 @@ private:
 
 template <int dim>
 ExampleProblem<dim>::ExampleProblem() 
-: fe(2)
+: fe(1)
 , dof_handler(mesh)
 {}
 
@@ -53,7 +53,7 @@ ExampleProblem<dim>::ExampleProblem()
 template <int dim>
 void ExampleProblem<dim>::readInMesh()
 {
-    std::ifstream input_file("../../../Meshes/Abaqus3DHexaUniformBeam.inp");
+    std::ifstream input_file("../../../Meshes/Abaqus3D1Cube.inp");
     mesh.read_abaqus(input_file);
 }
 
@@ -74,6 +74,21 @@ void ExampleProblem<dim>::assemble_system()
 {
     Quadrature::QGauss<dim> quadrature_formula(fe.getPolynomialDegree() + 1);
     FEM::FEValues<dim> fe_values(fe, quadrature_formula);
+
+    const unsigned int dofs_per_cell = fe.n_dofs_per_cell();
+
+    LinearAlgebra::FullMatrix<double> cell_matrix(dofs_per_cell, dofs_per_cell);
+    LinearAlgebra::Vector<double>     cell_rhs(dofs_per_cell);
+
+    // need to replace with dof_handler
+    for (const auto& hex : mesh.getVolumes())
+    {
+        cell_matrix.reinit(dofs_per_cell);
+        cell_rhs.reinit(dofs_per_cell);
+        fe_values.reinit(*hex.get());
+        fe_values.Jacobian2();
+
+    }
 
 }
 

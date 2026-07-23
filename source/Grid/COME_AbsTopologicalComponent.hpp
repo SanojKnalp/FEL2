@@ -5,8 +5,6 @@
 #include <map>
 #include <algorithm>
 #include <stdexcept>
-#include "FEM/FEValues/COME_FEValues.hpp"
-#include "Grid/COME_Node.hpp"
 
 //forward declaration:
 namespace FEM {

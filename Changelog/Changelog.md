@@ -1,6 +1,10 @@
 # Changelog
 All the changes i make to the code are documented here.
 ## 2026 
+### July
+#### 23.07.2026
+Wrote a function that precomputes the tensor-product indices. Implemented the Tensor product for gradients.
+Implemented the Jacobian. Fixed some weird unnecessary forward declaration issues.
 ### June
 #### 26.06.2026
 Reworked the mesh readIn for Abaqus to support a lexiographic numbering, which makes it later easier to use tensor products.

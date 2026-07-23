@@ -2,6 +2,7 @@
 #include "FEM/ShapeFunctions/COME_ShapeFunctions.hpp"
 #include "FEM/Quadrature/COME_Quadrature.hpp"
 #include "Grid/COME_AbsTopologicalComponent.hpp"
+#include "Grid/COME_Node.hpp"
 #include "LinearAlgebra/COME_Linalg_dense.hpp"
 
 #include <array>
@@ -27,12 +28,14 @@ namespace FEM
 			TensorProductQPointsAndWeights();
 		}
 
-		void Jacobian2() const;
+		void Jacobian2();
 
 		const double& shape_value(const unsigned int index, const unsigned int q_point) const;
 		const double& JxW(const unsigned int q_point) const;
 		void reinit(const Mesh::AbsTopologicalComponent<dim,spacedim>& cell);
 		std::vector<std::array<double, spacedim>>& get_cell_nodes();
+
+		unsigned int get_number_of_quadrature_points() const;
 
 
 	private:
@@ -43,14 +46,18 @@ namespace FEM
 		std::vector<std::array<double, dim>> qPoints_;
 		std::vector<double> qWeights_;
 		std::vector<std::array<double, spacedim>> cell_nodes;
+		std::vector<std::array<unsigned int, dim>> precomputed_indices_;
 
 
 
-		double TensorproductShapeFunctionsValue(const unsigned int index, std::array<double,dim>& localPoints) const;
-		LinearAlgebra::Vector<double> TensorproductShapeFunctionGradient(const unsigned int index, std::array<double, dim>& localPoints) const;
+		double TensorproductShapeFunctionsValue(const unsigned int index, const unsigned int q_point) const;
+		std::array<double, dim> TensorproductShapeFunctionGradient(const unsigned int index, const unsigned int q_point) const;
 		void TensorProductQPointsAndWeights();
-		LinearAlgebra::FullMatrix<double> Jacobian(const unsigned int q_point);
-		double JacobianDeterminant(const unsigned int q_point);
+		LinearAlgebra::FullMatrix<double> Jacobian(const unsigned int q_point) const;
+		double JacobianDeterminant(const unsigned int q_point) const;
+
+		// precomputes all the indices pairings so that they can be reused later.
+		void precompute_indices();
 
 	};
 
@@ -101,6 +108,25 @@ namespace FEM
 	}
 
 	template <int dim, int spacedim>
+	void FEValues<dim, spacedim>::precompute_indices()
+	{
+		precomputed_indices_.clear();
+		for (int i = 0; i < cell_nodes.size(); i++)
+		{
+			unsigned int temp_index = i;
+			const unsigned int n = fe_.getPolynomialDegree() + 1;
+			std::array<unsigned int, dim> local_index_nodes;
+			for (int i = 0; i < dim; i++)
+			{
+				unsigned int localIndex = temp_index % n;
+				temp_index /= n;
+				local_index_nodes[i] = localIndex;
+			}
+			precomputed_indices_.push_back(local_index_nodes);
+		}
+	}
+
+	template <int dim, int spacedim>
 	void FEValues<dim, spacedim>::reinit(const Mesh::AbsTopologicalComponent<dim, spacedim>& cell)
 	{
 		cell_nodes.clear();
@@ -108,6 +134,7 @@ namespace FEM
 		{
 			cell_nodes.push_back(node->getCoordinates());
 		}
+		precompute_indices();
 	}
 
 	template <int dim, int spacedim>
@@ -117,17 +144,9 @@ namespace FEM
 	}
 
 	template <int dim, int spacedim>
-	void FEValues<dim, spacedim>::Jacobian2() const
+	void FEValues<dim, spacedim>::Jacobian2()
 	{
-		std::cout << "nodes: ";
-		for (const auto& node : cell_nodes) {
-			std::cout << "[ ";
-			for (double coord : node) {
-				std::cout << coord << " ";
-			}
-			std::cout << "] ";
-		}
-		std::cout << std::endl;
+		std::cout << "jac det" << JacobianDeterminant(0) << std::endl;
 
 	}
 }

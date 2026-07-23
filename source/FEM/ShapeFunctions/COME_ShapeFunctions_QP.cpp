@@ -1,5 +1,5 @@
 #include "COME_ShapeFunctions_QP.hpp"
-
+#include <cmath>
 
 namespace ShapeFunctions
 {
