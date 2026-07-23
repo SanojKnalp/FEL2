@@ -66,14 +66,14 @@ namespace Quadrature
 	template <int dim>
 	std::vector<double> QGauss<dim>::get_QGauss_weight_degree_4() const
 	{
-		return std::vector<double>{(18.0 - sqrt(30.0)) / 36.0, (18.0 + sqrt(30.0)) / 36.0, (18.0 + sqrt(30.0)) / 36.0, (18.0 - sqrt(30.0)) / 36.0};
+		return std::vector<double>{(18.0 - std::sqrt(30.0)) / 36.0, (18.0 + std::sqrt(30.0)) / 36.0, (18.0 + std::sqrt(30.0)) / 36.0, (18.0 - std::sqrt(30.0)) / 36.0};
 	}
 
 	//--------------- degree 5---------------------
 	template <int dim>
 	std::vector<double> QGauss<dim>::get_QGauss_weight_degree_5() const
 	{
-		return std::vector<double>{(322.0 - 13.0 * sqrt(70.0)) / 900.0, (322.0 + 13.0 * sqrt(70.0)) / 900.0, 128.0 / 225.0, (322.0 + 13.0 * sqrt(70.0)) / 900.0, (322.0 - 13.0 * sqrt(70.0)) / 900.0};
+		return std::vector<double>{(322.0 - 13.0 * std::sqrt(70.0)) / 900.0, (322.0 + 13.0 * std::sqrt(70.0)) / 900.0, 128.0 / 225.0, (322.0 + 13.0 * std::sqrt(70.0)) / 900.0, (322.0 - 13.0 * std::sqrt(70.0)) / 900.0};
 	}
 
 	//--------------- degree 6---------------------
