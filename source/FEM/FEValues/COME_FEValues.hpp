@@ -31,6 +31,7 @@ namespace FEM
 		void Jacobian2();
 
 		const double shape_value(const unsigned int index, const unsigned int q_point) const;
+		const LinearAlgebra::Vector<double> shape_grad(const unsigned int index, const unsigned int q_point);
 		const double JxW(const unsigned int q_point) const;
 		void reinit(const Mesh::AbsTopologicalComponent<dim,spacedim>& cell);
 		std::vector<std::array<double, spacedim>>& get_cell_nodes();
@@ -47,6 +48,8 @@ namespace FEM
 		std::vector<double> qWeights_;
 		std::vector<std::array<double, spacedim>> cell_nodes;
 		std::vector<std::array<unsigned int, dim>> precomputed_indices_;
+		std::vector<LinearAlgebra::FullMatrix<double>(dim, dim)> jacobians_;
+		std::vector<LinearAlgebra::FullMatrix<double>(dim, dim)> inverse_transpose_jacobians_;
 
 
 
@@ -56,8 +59,11 @@ namespace FEM
 		LinearAlgebra::FullMatrix<double> Jacobian(const unsigned int q_point) const;
 		double JacobianDeterminant(const unsigned int q_point) const;
 
+
 		// precomputes all the indices pairings so that they can be reused later.
 		void precompute_indices();
+		void precompute_jacobians();
+		void precompute_inverse_transpose_jacobians();
 
 	};
 
@@ -127,14 +133,36 @@ namespace FEM
 	}
 
 	template <int dim, int spacedim>
+	void FEValues<dim, spacedim>::precompute_jacobians()
+	{
+		for (unsigned int i = 0; i< get_number_of_quadrature_points(); i++)
+		{
+			jacobians_.push_back(Jacobian(i));
+		}
+	}
+
+	template <int dim, int spacedim>
+	void FEValues<dim, spacedim>::precompute_inverse__transpose_jacobians()
+	{
+		for (const auto& jacobian : jacobians_)
+		{
+			inverse_transpose_jacobians_.push_back(jacobian.small_dim_inverse().transpose());
+		}
+	}
+
+	template <int dim, int spacedim>
 	void FEValues<dim, spacedim>::reinit(const Mesh::AbsTopologicalComponent<dim, spacedim>& cell)
 	{
 		cell_nodes.clear();
+		jacobians_.clear();
+		inverse_jacobians.clear();
 		for (auto& node : cell.getNodes())
 		{
 			cell_nodes.push_back(node->getCoordinates());
 		}
 		precompute_indices();
+		precompute_jacobians();
+
 	}
 
 	template <int dim, int spacedim>

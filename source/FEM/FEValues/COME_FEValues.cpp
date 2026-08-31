@@ -19,6 +19,20 @@ namespace FEM
 	{
 		return TensorproductShapeFunctionsValue(index, q_point);
 	}
+
+	template <int dim, int spacedim>
+	const LinearAlgebra::Vector<double> FEValues<dim, spacedim>::shape_grad(const unsigned int index, const unsigned int q_point)
+	{
+		std::array<double, dim> shape_grads = TensorproductShapeFunctionGradient(index, q_point);
+		LinearAlgebra::Vector<double> grad(dim);
+		for (i = 0; i < dim; i++)
+		{
+			grad(i) = shape_grads[i];
+		}
+		return inverse_transpose_jacobians_[index]*grad;
+	}
+
+
 	
 	template <int dim, int spacedim>
 	std::array<double, dim> FEValues<dim, spacedim>::TensorproductShapeFunctionGradient(const unsigned int index, const unsigned int q_point) const
@@ -86,14 +100,14 @@ namespace FEM
 	template <int dim, int spacedim>
 	double FEValues<dim, spacedim>::JacobianDeterminant(const unsigned int q_point) const
 	{
-		return Jacobian(q_point).det();
+		return jacobians_[q_point].det();
 	}
 
 	
 	template <int dim, int spacedim>
 	const double FEValues<dim, spacedim>::JxW(const unsigned int q_point) const
 	{
-		return qWeights_[q_point]*JacobianDeterminant(q_point); // we still need the jacobian
+		return qWeights_[q_point]*JacobianDeterminant(q_point); 
 
 	}
 

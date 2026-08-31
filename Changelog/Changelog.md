@@ -1,6 +1,11 @@
 # Changelog
 All the changes i make to the code are documented here.
 ## 2026 
+### August
+#### 31.08.2026
+Extended the dense linear algebra wrapper to also provide a copy version of the inverse matrices, which is used with constexpr.
+Implemented a function that precomputes the jacobians and inverse-transpose jacobians. These are then later used for shape_grad(), which i also implemented.
+With all these changes, we should now be able to compute everything we need. Next step is to write tests and test it with a simple hypercube poisson equation in 3D.
 ### July
 #### 23.07.2026
 Wrote a function that precomputes the tensor-product indices. Implemented the Tensor product for gradients.

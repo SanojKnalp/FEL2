@@ -195,9 +195,95 @@ namespace LinearAlgebra {
         T det()
         {
             return arma::det(mat);
+
         }
 
+        FullMatrix<T> inverse1x1_new()
+        {
+            if (mat(0, 0) == 0)
+            {
+                throw std::runtime_error("inverse1x1(): singular matrix");
+            }
+            FullMatrix<T> C(1, 1);
+            C(0, 0) = 1 / mat(0, 0);
+            return C;
+        }
 
+        FullMatrix<T> inverse2x2_new()
+        {
+            auto detA = arma::det(mat);
+            if (detA == T(0))
+            {
+                throw std::runtime_error("inverse2x2(): singular matrix");
+            }
+            FullMatrix<T> C(2, 2);
+            T a = mat(0, 0);
+            T b = mat(0, 1);
+            T c = mat(1, 0);
+            T d = mat(1, 1);
+
+            C(0, 0) = d;
+            C(0, 1) = -b;
+            C(1, 0) = -c;
+            C(1, 1) = a;
+
+            C /= detA;
+            return C;
+        }
+
+        FullMatrix<T> inverse3x3_new()
+        {
+            auto detA = arma::det(mat);
+            if (detA == T(0))
+            {
+                throw std::runtime_error("inverse3x3(): singular matrix");
+            }
+            FullMatrix<T> C(3, 3);
+            T a = mat(0, 0);
+            T b = mat(0, 1);
+            T c = mat(0, 2);
+            T d = mat(1, 0);
+            T e = mat(1, 1);
+            T f = mat(1, 2);
+            T g = mat(2, 0);
+            T h = mat(2, 1);
+            T i = mat(2, 2);
+
+            C(0, 0) = e * i - f * h;
+            C(0, 1) = c * h - b * i;
+            C(0, 2) = b * f - c * e;
+            C(1, 0) = f * g - d * i;
+            C(1, 1) = a * i - c * g;
+            C(1, 2) = c * d - a * f;
+            C(2, 0) = d * h - e * g;
+            C(2, 1) = b * g - a * h;
+            C(2, 2) = a * e - b * d;
+
+            C /= detA;
+            return C;
+
+        }
+
+        FullMatrix<T> small_dim_inverse()
+        {
+            if constexpr (this->cols() == 1)
+            {
+                return this->inverse1x1_new();
+            }
+            else if constexpr (this->cols() == 2)
+            {
+                return this->inverse2x2_new();
+            }
+            else if constexpr (this->cols() == 3)
+            {
+                return this->inverse3x3_new();
+            }
+        }
+
+        FullMatrix<T>& transpose()
+        {
+            return this->mat.t();
+        }
 
 
     };
