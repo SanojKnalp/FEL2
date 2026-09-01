@@ -106,6 +106,13 @@ namespace LinearAlgebra {
             out.mat = mat - B.mat;
             return out;
         }
+
+        // Scalar Division
+        FullMatrix<T>& operator/=(T scalar)
+        {
+            mat /= scalar;
+            return *this;
+        }
         //Extract the diagonal Matrix
         // No pass by reference cause we create something new
         FullMatrix<T> diagonalMatrix() const
@@ -192,13 +199,13 @@ namespace LinearAlgebra {
             return *this;
         }
 
-        T det()
+        T det() const
         {
             return arma::det(mat);
 
         }
 
-        FullMatrix<T> inverse1x1_new()
+        FullMatrix<T> inverse1x1_new() 
         {
             if (mat(0, 0) == 0)
             {
@@ -209,7 +216,7 @@ namespace LinearAlgebra {
             return C;
         }
 
-        FullMatrix<T> inverse2x2_new()
+        FullMatrix<T> inverse2x2_new() 
         {
             auto detA = arma::det(mat);
             if (detA == T(0))
@@ -231,7 +238,7 @@ namespace LinearAlgebra {
             return C;
         }
 
-        FullMatrix<T> inverse3x3_new()
+        FullMatrix<T> inverse3x3_new() 
         {
             auto detA = arma::det(mat);
             if (detA == T(0))
@@ -264,17 +271,17 @@ namespace LinearAlgebra {
 
         }
 
-        FullMatrix<T> small_dim_inverse()
+        FullMatrix<T> small_dim_inverse() 
         {
-            if constexpr (this->cols() == 1)
+            if (this->cols() == 1)
             {
                 return this->inverse1x1_new();
             }
-            else if constexpr (this->cols() == 2)
+            else if (this->cols() == 2)
             {
                 return this->inverse2x2_new();
             }
-            else if constexpr (this->cols() == 3)
+            else if (this->cols() == 3)
             {
                 return this->inverse3x3_new();
             }
@@ -282,7 +289,8 @@ namespace LinearAlgebra {
 
         FullMatrix<T>& transpose()
         {
-            return this->mat.t();
+            this->mat.t();
+            return *this;
         }
 
 

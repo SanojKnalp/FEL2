@@ -1,6 +1,9 @@
 # Changelog
 All the changes i make to the code are documented here.
 ## 2026 
+### September
+#### 01.09.2026
+Fixed a bunch of bugs with the latest push and now correctly precompute everything needed.
 ### August
 #### 31.08.2026
 Extended the dense linear algebra wrapper to also provide a copy version of the inverse matrices, which is used with constexpr.

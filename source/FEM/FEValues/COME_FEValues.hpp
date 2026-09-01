@@ -48,8 +48,8 @@ namespace FEM
 		std::vector<double> qWeights_;
 		std::vector<std::array<double, spacedim>> cell_nodes;
 		std::vector<std::array<unsigned int, dim>> precomputed_indices_;
-		std::vector<LinearAlgebra::FullMatrix<double>(dim, dim)> jacobians_;
-		std::vector<LinearAlgebra::FullMatrix<double>(dim, dim)> inverse_transpose_jacobians_;
+		std::vector<LinearAlgebra::FullMatrix<double>> jacobians_;
+		std::vector<LinearAlgebra::FullMatrix<double>> inverse_transpose_jacobians_;
 
 
 
@@ -142,9 +142,9 @@ namespace FEM
 	}
 
 	template <int dim, int spacedim>
-	void FEValues<dim, spacedim>::precompute_inverse__transpose_jacobians()
+	void FEValues<dim, spacedim>::precompute_inverse_transpose_jacobians()
 	{
-		for (const auto& jacobian : jacobians_)
+		for (auto& jacobian : jacobians_)
 		{
 			inverse_transpose_jacobians_.push_back(jacobian.small_dim_inverse().transpose());
 		}
@@ -155,13 +155,14 @@ namespace FEM
 	{
 		cell_nodes.clear();
 		jacobians_.clear();
-		inverse_jacobians.clear();
+		inverse_transpose_jacobians_.clear();
 		for (auto& node : cell.getNodes())
 		{
 			cell_nodes.push_back(node->getCoordinates());
 		}
 		precompute_indices();
 		precompute_jacobians();
+		precompute_inverse_transpose_jacobians();
 
 	}
 

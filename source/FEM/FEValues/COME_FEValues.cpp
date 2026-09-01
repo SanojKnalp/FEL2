@@ -25,11 +25,11 @@ namespace FEM
 	{
 		std::array<double, dim> shape_grads = TensorproductShapeFunctionGradient(index, q_point);
 		LinearAlgebra::Vector<double> grad(dim);
-		for (i = 0; i < dim; i++)
+		for (unsigned int i = 0; i < dim; i++)
 		{
 			grad(i) = shape_grads[i];
 		}
-		return inverse_transpose_jacobians_[index]*grad;
+		return inverse_transpose_jacobians_[q_point]*grad;
 	}
 
 
