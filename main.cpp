@@ -86,7 +86,6 @@ void ExampleProblem<dim>::assemble_system()
         cell_matrix.reinit(dofs_per_cell);
         cell_rhs.reinit(dofs_per_cell);
         fe_values.reinit(*hex.get());
-        fe_values.Jacobian2();
 
     }
 
