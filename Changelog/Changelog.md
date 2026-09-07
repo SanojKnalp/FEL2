@@ -2,6 +2,8 @@
 All the changes i make to the code are documented here.
 ## 2026 
 ### September
+#### 07.09.2026 
+Fixed more bugs
 #### 01.09.2026
 Fixed a bunch of bugs with the latest push and now correctly precompute everything needed.
 ### August

@@ -28,8 +28,6 @@ namespace FEM
 			TensorProductQPointsAndWeights();
 		}
 
-		void Jacobian2();
-
 		const double shape_value(const unsigned int index, const unsigned int q_point) const;
 		const LinearAlgebra::Vector<double> shape_grad(const unsigned int index, const unsigned int q_point);
 		const double JxW(const unsigned int q_point) const;
@@ -170,12 +168,5 @@ namespace FEM
 	std::vector<std::array<double, spacedim>>& FEValues<dim, spacedim>::get_cell_nodes()
 	{
 		return cell_nodes;
-	}
-
-	template <int dim, int spacedim>
-	void FEValues<dim, spacedim>::Jacobian2()
-	{
-		std::cout << "jac det" << JacobianDeterminant(0) << std::endl;
-
 	}
 }

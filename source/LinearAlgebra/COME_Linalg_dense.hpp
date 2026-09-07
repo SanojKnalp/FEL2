@@ -285,11 +285,15 @@ namespace LinearAlgebra {
             {
                 return this->inverse3x3_new();
             }
+            else
+            {
+                throw std::runtime_error("This function does not allow for the computation of any higher dimensional matrix than dimension 3x3.");
+            }
         }
 
         FullMatrix<T>& transpose()
         {
-            this->mat.t();
+            this->mat = this->mat.t();
             return *this;
         }
 
